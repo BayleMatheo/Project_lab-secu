@@ -21,5 +21,4 @@ Différentes étapes :
 \
 \
 **Difficultés techniques :**
-###### "Légèrement"
-## ambitieux
+###### "Légèrement" ambitieux
