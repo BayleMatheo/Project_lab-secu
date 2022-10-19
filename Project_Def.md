@@ -17,3 +17,9 @@ Différentes étapes :
 - Rechercher les diff outils qu'on va utiliser
 - Automatiser via un script les diff outils de pentest qu'on va utiliser
 - Le tester sur le site web pour savoir si on retrouve bien les failles présentes
+
+\
+\
+**Difficultés techniques :**
+###### "Légèrement"
+## ambitieux
