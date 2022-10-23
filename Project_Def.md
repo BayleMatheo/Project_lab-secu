@@ -5,7 +5,7 @@ Automatiser un test de pentest pour trouver failles sur un site web qu'on aura c
 
  Pour cela on va utiliser différents languages de programmation pour créer le site web (utilisation language html, css, php, javascript, sql) + recherche des outils qui vont nous permettre de faire le test de pénétration + pouvoir les automatiser avec un script.
 
-Différentes étapes :
+Différentes étapes :dc
 ===============
 
 ## 1ère étape : création site web + introduire différentes failles
