@@ -1,17 +1,4 @@
-Cassaigne Quentin  
-Matheo Bayle
-
-````diff
-- text in red
-+ text in green
-! text in orange
-# text in gray
-@@ text in purple (and bold)@@
-````
-
-
-! Automatisation d'un test de pentest 
-
+# Automatisation d'un test de pentest 
 
 **But du projet :**\
 Automatiser un test de pentest pour trouver failles sur un site web qu'on aura crée pour ça.
@@ -32,6 +19,10 @@ Différentes étapes :
 - Le tester sur le site web pour savoir si on retrouve bien les failles présentes
 
 \
-\
 **Difficultés techniques :**  
 Pas trop de connaissance sur le sujet pour le moment.
+
+\
+\
+Cassaigne Quentin  
+Matheo Bayle
