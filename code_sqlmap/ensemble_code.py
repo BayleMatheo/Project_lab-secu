@@ -81,7 +81,7 @@ def table_name():
     table = table_name
     return(texte)
 
-
+"""mettre iput avec nom de tables etc... ex 1:user     2: user_form"""
 def column_name():
     global column
     print("je suis une merde")
