@@ -227,9 +227,6 @@ def trouver_tab0(nom_table):
 
 
 def dump_columns(table, tab0, column_name):
-    print(table)
-    print(tab0)
-    print(column_name)
     tab = column_name
     nom_colonne = tab0
     dictionary = ["1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
@@ -259,6 +256,13 @@ def dump_columns(table, tab0, column_name):
                                 x = 1
                                 z += 1
                             else:
+                                c = len(idk)
+                                d = c//2
+                                a=idk[d:]
+                                b=idk[:d]
+                                print(tab)
+                                for j in range(len(nom_colonne)):
+                                    print(" {} : {} : {} ".format(nom_colonne[j], b[j], a[j]))
                                 quit()
                             break
                         else:
@@ -278,6 +282,7 @@ def dump_columns(table, tab0, column_name):
                         j=0
                         i+=1
                         break
+
 
 nom_base_de_donnée = db_name()
 nom_table = table_name(nom_base_de_donnée)
