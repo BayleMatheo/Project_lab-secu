@@ -1,8 +1,6 @@
-salut1
-salut
-test
 svdxcds
 x
+test
 the
 of
 to
@@ -470,7 +468,6 @@ island
 foot
 system
 busy
-test
 record
 boat
 common
