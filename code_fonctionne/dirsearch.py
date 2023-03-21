@@ -4,7 +4,7 @@ r = requests.Session()
 
 url = 'http://51.15.136.118:80/'
 
-with open('dirlist.txt', 'r') as dirfile:
+with open('./wordlists/dirlist.txt', 'r') as dirfile:
     hidedir = dirfile.readlines()
 
 list_dir = []

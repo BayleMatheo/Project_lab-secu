@@ -4,9 +4,9 @@ r = requests.Session()
 
 url = 'http://51.15.136.118:80/pageid.php'
 
-with open('userlist.txt', 'r') as userfile:
+with open('./wordlists/userlist.txt', 'r') as userfile:
     users = userfile.readlines()
-with open('passwordlist.txt', 'r') as passfile:
+with open('./wordlists/passwordlist.txt', 'r') as passfile:
     passwords = passfile.readlines()
 
 for user in users:
