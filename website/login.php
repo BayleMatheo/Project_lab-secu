@@ -1,4 +1,5 @@
 <?php
+setcookie ("PHPSESSID", "", time() - 3600, '/');
 // Connexion à la base de données
 $conn = mysqli_connect("localhost", "quentin", "quentin", "db_web");
 session_start();
@@ -17,34 +18,11 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
     if (mysqli_num_rows($result) == true) {
         $row = mysqli_fetch_assoc($result);
-        $user_id = $row['id'];
         $username = $row['username'];
-        $encoded_username = base64_encode($username);
-        setcookie($user_id, $encoded_username, time() + (86400 * 30), '/');
-        $filename = "userpage_{$user_id}.php";
-        $template_file = "userpage_template.php"; // Le fichier de modèle de page utilisateur
-        if (!file_exists($filename)) {
-            if (copy($template_file, $filename)) {
-                // La copie a réussi, rediriger vers la page utilisateur unique
-                $_SESSION['id'] = $user_id;
-                $_SESSION['username'] = $username;
-                $_SESSION['password'] = $pass;
-                $session_id = base64_encode(random_bytes(32));
-                setcookie("session_id", $session_id);
-                header("Location: {$filename}");
-                exit;
-            } else {
-                // La copie a échoué, afficher un message d'erreur
-                $error_message = "Impossible de créer la page utilisateur. Erreur : " . error_get_last()['message'];
-            }
-        } else {
-            // La page utilisateur existe déjà, rediriger vers cette page
-            $_SESSION['id'] = $user_id;
-            $_SESSION['username'] = $username;
-            $_SESSION['password'] = $pass;
-            header("Location: {$filename}");
-            exit;
-        }
+        $encoded_username = base64_encode($username . "v4er9ll1!ss");
+        setcookie('user_id', $encoded_username, time() + (86400 * 30), '/', '', false, false);
+        header("Location: userpage.php");
+        exit;
     } else {
         // Affichage d'un message d'erreur en cas d'identifiants incorrects
         $error_message = "Nom d'utilisateur ou mot de passe incorrect";
