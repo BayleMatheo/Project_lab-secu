@@ -1,4 +1,6 @@
 <?php
+setcookie ("PHPSESSID", "", time() - 3600, '/');
+session_start();
 @include 'config.php';
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
