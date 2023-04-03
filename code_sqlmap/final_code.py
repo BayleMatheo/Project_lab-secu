@@ -39,8 +39,7 @@ def db_name():
             response = requests.post(url, data={'username': usr, 'password': passwd})
             end_time = time.time()
             total_time = end_time - start_time
-            """print(total_time)
-            print(dictionary[j])"""
+            """print(total_time)"""
             a += 1
             print(a)
             if a > 27:
