@@ -18,6 +18,7 @@ if(isset($_COOKIE['user_id'])) {
         $row = mysqli_fetch_assoc($result);
         $user_id = $row['id'];
         $password = $row['password'];
+
     }
 }
 ?>
@@ -35,6 +36,7 @@ if(isset($_COOKIE['user_id'])) {
     <p>id: <?php echo $user_id; ?></p>
     <p>username: <?php echo $username; ?></p>
     <p>password: <?php echo $password; ?></p>
-    <a href="login.php">Logout</a>
+    <button onclick="showCookies()">Show cookies</button>
+    <a href="login_cookie.php">Logout</a>
 </body>
 </html>

@@ -11,8 +11,8 @@ if (!$conn) {
 // Vérification des identifiants de connexion
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
-    $pass = md5($_POST['password']);
-
+    $password = $_POST['password'];
+    $pass = hash('sha512', $password);
     $query = "SELECT * FROM users WHERE username = '$username' AND password = '$pass'";
     $result = mysqli_query($conn, $query);
 
@@ -21,7 +21,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         $username = $row['username'];
         $encoded_username = base64_encode($username . "v4er9ll1!ss");
         setcookie('user_id', $encoded_username, time() + (86400 * 30), '/', '', false, false);
-        header("Location: userpage.php");
+        header("Location: userpage_cookie.php");
         exit;
     } else {
         // Affichage d'un message d'erreur en cas d'identifiants incorrects
@@ -36,7 +36,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>register form</title>
+    <title>login form</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>

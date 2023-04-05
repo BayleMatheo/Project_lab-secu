@@ -5,7 +5,8 @@ session_start();
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username =$_POST['username'];
-    $password=md5($_POST['password']);
+    $pass=$_POST['password'];
+    $password = hash('sha512', $pass);
     $select="SELECT * FROM users WHERE username = '$username'";
     $result = mysqli_query($conn, $select);
     if(mysqli_num_rows($result)>0){
@@ -13,7 +14,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             }else{
                 $insert="INSERT INTO users(username,password) VALUES('$username','$password')";
                 mysqli_query($conn,$insert);
-                header('location:login.php');
+                header('location:login_cookie.php');
     }
 };
 
@@ -46,7 +47,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         <input type="text" name="username" required placeholder="enter your username">
         <input type="password" name="password" required placeholder="enter your password">
         <input type="submit" name="submit" value="register now" class="form-btn">
-        <p> already have an account? <a href="login.php">login now</a></p>
+        <p> already have an account? <a href="login_cookie.php">login now</a></p>
     </form>
 </div>
 
