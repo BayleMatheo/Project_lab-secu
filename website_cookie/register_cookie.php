@@ -17,9 +17,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 header('location:login_cookie.php');
     }
 };
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
