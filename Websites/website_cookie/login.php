@@ -15,8 +15,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $pass = hash('sha256', $password);
     $query = "SELECT * FROM users WHERE username = '$username' AND password = '$pass'";
     $result = mysqli_query($conn, $query);
-
-    if (mysqli_num_rows($result) == true) {
+    
+    // Or  == true
+    if (mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);
         $username = $row['username'];
         $encoded_username = base64_encode($username . "v4er9esdfve");

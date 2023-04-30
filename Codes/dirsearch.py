@@ -12,14 +12,13 @@ list_dir = []
 for i in hidedir:
     hidedir = i.strip()
     fullurl = url+hidedir
-    # print(fullurl)
     a = r.post(fullurl)
     if a.status_code != 404:
         list_dir.append(i)
-    print(list_dir)
+        print(list_dir)
 
 string = []
-for newline in list_dir:
-    string.append(newline.replace("\n", ""))
+for line in list_dir:
+    string.append(line.replace("\n", ""))
 
 print(str(string))

