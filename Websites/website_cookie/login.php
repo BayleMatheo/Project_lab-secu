@@ -1,7 +1,7 @@
 <?php
 setcookie ("PHPSESSID", "", time() - 3600, '/');
 // Connexion à la base de données
-$conn = mysqli_connect("localhost", "quentin", "quentin", "db_web");
+$conn = mysqli_connect("localhost", "quentin", "quentin", "db-web");
 session_start();
 
 if (!$conn) {
@@ -12,16 +12,16 @@ if (!$conn) {
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $pass = hash('sha512', $password);
+    $pass = hash('sha256', $password);
     $query = "SELECT * FROM users WHERE username = '$username' AND password = '$pass'";
     $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) == true) {
         $row = mysqli_fetch_assoc($result);
         $username = $row['username'];
-        $encoded_username = base64_encode($username . "v4er9ll1!ss");
-        setcookie('user_id', $encoded_username, time() + (86400 * 30), '/', '', false, false);
-        header("Location: userpage_cookie.php");
+        $encoded_username = base64_encode($username . "v4er9esdfve");
+        setcookie('user_cookie', $encoded_username, time() + (86400 * 30), '/', '', false, false);
+        header("Location: userpage.php");
         exit;
     } else {
         // Affichage d'un message d'erreur en cas d'identifiants incorrects

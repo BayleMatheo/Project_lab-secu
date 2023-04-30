@@ -1,8 +1,0 @@
-import requests
-
-url = "https://www.projet-voltaire.fr/"
-response = requests.get(url)
-cookies = response.cookies
-
-# Afficher les cookies
-print(cookies)

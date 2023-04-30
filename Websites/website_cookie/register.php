@@ -1,12 +1,12 @@
 <?php
 setcookie ("PHPSESSID", "", time() - 3600, '/');
 session_start();
-@include 'config.php';
+$conn = mysqli_connect("localhost", "quentin", "quentin", "db-web");
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username =$_POST['username'];
     $pass=$_POST['password'];
-    $password = hash('sha512', $pass);
+    $password = hash('sha256', $pass);
     $select="SELECT * FROM users WHERE username = '$username'";
     $result = mysqli_query($conn, $select);
     if(mysqli_num_rows($result)>0){
@@ -14,10 +14,12 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             }else{
                 $insert="INSERT INTO users(username,password) VALUES('$username','$password')";
                 mysqli_query($conn,$insert);
-                header('location:login_cookie.php');
+                header('location:login.php');
     }
 };
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,7 +47,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         <input type="text" name="username" required placeholder="enter your username">
         <input type="password" name="password" required placeholder="enter your password">
         <input type="submit" name="submit" value="register now" class="form-btn">
-        <p> already have an account? <a href="login_cookie.php">login now</a></p>
+        <p> already have an account? <a href="login.php">login now</a></p>
     </form>
 </div>
 

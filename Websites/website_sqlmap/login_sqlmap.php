@@ -1,5 +1,5 @@
 <?php
-$conn = mysqli_connect("localhost", "quentin", "quentin", "nom_user_db");
+$conn = mysqli_connect("localhost", "quentin", "quentin", "nom-user-db");
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());

@@ -1,7 +1,6 @@
 import requests
 
 url = input("Choose url: ")
-"""url = "http://51.15.136.118/pageid.php" """
 with open('payloads.txt', 'r') as userfile:
     users = userfile.readlines()
 

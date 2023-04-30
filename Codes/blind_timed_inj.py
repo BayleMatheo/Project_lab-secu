@@ -318,8 +318,10 @@ def dump_columns(table, tab0, column_name):
                         i+=1
                         break
 
-nom_base_de_donnée = db_name()
-nom_table = table_name(nom_base_de_donnée)
-nom_colonne = column_name(nom_base_de_donnée, nom_table)
-tab0 = trouver_tab0(nom_table)
-param = dump_columns(nom_table, tab0, nom_colonne)
+
+if __name__ == "__main__":
+    nom_base_de_donnée = db_name()
+    nom_table = table_name(nom_base_de_donnée)
+    nom_colonne = column_name(nom_base_de_donnée, nom_table)
+    tab0 = trouver_tab0(nom_table)
+    param = dump_columns(nom_table, tab0, nom_colonne)
