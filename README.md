@@ -7,9 +7,8 @@ Projet étudiant de 1ère année qui a pour but d'acquérir des compétences dan
 Composition du projet :
 
 - 2 sites web :
-    - un avec page login + userpage pour tester des codes sur le bruteforcing + recherche de répertoire cachés + test de différents payloads + sqli time-based pour cartographier la base de données
-
-    - un deuxième avec page register + login et userpage pour exploiter failles xss + cookie de session
+    - un premier avec page register + login et userpage pour tester des codes sur le bruteforcing + recherche de répertoire cachés + test de différents payloads + vole de cookie de session
+    - un deuxième pour exploiter un sql injection time-based blind pour cartographier la base de données
 
 - plusieurs codes python pour faire les tests expliqués précédemment.
 
