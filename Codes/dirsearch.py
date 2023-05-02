@@ -15,7 +15,6 @@ for i in hidedir:
     a = r.post(fullurl)
     if a.status_code != 404:
         list_dir.append(i)
-        print(list_dir)
 
 string = []
 for line in list_dir:

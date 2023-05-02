@@ -1,7 +1,7 @@
 import hashlib
 
 # Hash to crack
-hash_to_crack = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" # this is the SHA-256 hash of the word "password"
+hash_to_crack = "" # this is the SHA-256 hash of the word "password"
 
 # Read dictionary file
 with open('./wordlists/password256.txt', "r") as file:

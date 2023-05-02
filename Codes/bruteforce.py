@@ -25,8 +25,8 @@ for user in users:
             
 # Print results in a table
 print("-------------------------------------------------------------------")
-print("{:<20} {:<20} {:<10} {:<50}".format('Username', 'Password', 'Status', 'Location'))
+print("{:<15} {:<15} {:<10} {:<50}".format('Username', 'Password', 'Status', 'Location'))
 for result in results:
-    print("{:<20} {:<20} {:<10} {:<50}".format(result['user'], result['password'], result['status'], result.get('location', '')))
+    print("{:<15} {:<15} {:<10} {:<50}".format(result['user'], result['password'], result['status'], result.get('location', '')))
         
 
